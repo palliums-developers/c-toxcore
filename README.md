@@ -10,12 +10,11 @@ sudo apt-get install cmake
 ## 安装
 ```sh
 cd ./third_party/libsodium
-git checkout tags/1.0.3
-make clean
-./autogen
+./autogen.sh
 ./configure
 make 
 sudo make install
+make clean
 cd ../../
 
 rm _build -f

@@ -2,15 +2,16 @@
 
 set -u -e 
 cd ./third_party/libsodium
-make clean
 ./autogen.sh
 ./configure
 make 
 sudo make install
+make clean
 cd ../../
 
-
+rm _build
 mkdir _build
+cd _build
 cmake \
     -DAUTOTEST=ON \
     -DBOOTSTRAP_DAEMON=OFF \
