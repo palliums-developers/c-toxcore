@@ -1,15 +1,15 @@
 #!/bin/bash
 
-set -u -e 
+set -x -e 
 cd ./third_party/libsodium
 ./autogen.sh
 ./configure
 make 
 sudo make install
-make clean
+make distclean
 cd ../../
 
-rm _build
+rm _build -f
 mkdir _build
 cd _build
 cmake \
