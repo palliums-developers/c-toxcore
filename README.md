@@ -4,19 +4,16 @@
 ## ubuntu
 
 ```sh
-git clone -b stable git://github.com/jedisct1/libsodium.git
-cd libsodium
+cd ./third_party/libsodium
 git checkout tags/1.0.3
 make clean
 ./autogen
 ./configure 
 make 
 sudo make install
-cd ..
+cd ../../
 
 
-git clone https://github.com/palliums-developers/c-toxcore.git
-cd c-toxcore
 mkdir _build
 cmake \
     -DAUTOTEST=ON \
