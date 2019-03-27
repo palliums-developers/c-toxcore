@@ -1,11 +1,42 @@
-# ![Project Tox](https://raw.github.com/TokTok/c-toxcore/master/other/tox.png "Project Tox")
 
-**Current build status:** [![Build Status](https://travis-ci.org/TokTok/c-toxcore.svg?branch=master)](https://travis-ci.org/TokTok/c-toxcore)
-**Current Coverage:** [![Coverage Status](https://coveralls.io/repos/github/TokTok/c-toxcore/badge.svg?branch=master)](https://coveralls.io/github/TokTok/c-toxcore?branch=master)
+## 安装库
 
-[**Website**](https://tox.chat) **|** [**Wiki**](https://wiki.tox.chat/) **|** [**Blog**](https://blog.tox.chat/) **|** [**FAQ**](https://wiki.tox.chat/doku.php?id=users:faq) **|** [**Binaries/Downloads**](https://wiki.tox.chat/Binaries) **|** [**Clients**](https://wiki.tox.chat/doku.php?id=clients) **|** [**Compiling**](/INSTALL.md) **|** [**Toxcore's Projects**](https://github.com/TokTok/c-toxcore/projects)
+## ubuntu
 
-**IRC Channels:** Users: [#tox@freenode](https://webchat.freenode.net/?channels=tox), Developers: [#toktok@freenode](https://webchat.freenode.net/?channels=toktok)
+```sh
+git clone -b stable git://github.com/jedisct1/libsodium.git
+cd libsodium
+git checkout tags/1.0.3
+make clean
+./autogen
+./configure 
+make 
+sudo make install
+cd ..
+
+
+git clone https://github.com/palliums-developers/c-toxcore.git
+cd c-toxcore
+mkdir _build
+cmake \
+    -DAUTOTEST=ON \
+    -DBOOTSTRAP_DAEMON=OFF \
+    -DBUILD_AV_TEST=OFF \
+    -DBUILD_MISC_TESTS=OFF \
+    -DBUILD_TOXAV=OFF \
+    -DDHT_BOOTSTRAP=OFF \
+    -DENABLE_SHARED=ON \
+    -DENABLE_STATIC=ON \
+    -DMIN_LOGGER_LEVEL=DEBUG \
+    -DBUILD_MISC_TESTS=OFF \
+    -DBUILD_MISC_TESTS=OFF \
+    -DUSE_IPV6=ON \
+     ..
+make 
+sudo make install 
+```
+
+
 
 ## What is Tox
 
