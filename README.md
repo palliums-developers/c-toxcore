@@ -1,14 +1,15 @@
 
-## 安装库
 
 ## ubuntu
+
+## 安装
 
 ```sh
 cd ./third_party/libsodium
 git checkout tags/1.0.3
 make clean
 ./autogen
-./configure 
+./configure
 make 
 sudo make install
 cd ../../
@@ -33,7 +34,17 @@ make
 sudo make install 
 ```
 
+## 卸载 
 
+```sh
+sudo rm -rf /usr/local/lib/libtoxcore* 
+sudo rm -rf /usr/local/lib/libsodium*
+sudo rm -rf /usr/local/include/sodium* 
+sudo rm -rf /usr/local/include/tox 
+sudo rm  /usr/bin/DHT_bootstrap
+sudo rm  /usr/bin/tox-bootstrapd
+```
+对应的文件在sh/ubuntu_install.sh  sh/ubuntu_uninstall.sh
 
 ## What is Tox
 
