@@ -1,7 +1,9 @@
+#!/bin/bash
+
+set -u -e 
 cd ./third_party/libsodium
-git checkout tags/1.0.3
 make clean
-./autogen
+./autogen.sh
 ./configure
 make 
 sudo make install

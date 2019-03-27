@@ -2,8 +2,12 @@
 
 ## ubuntu
 
+## 工具
+```sh
+sudo apt-get install autoconf
+sudo apt-get install cmake
+```
 ## 安装
-
 ```sh
 cd ./third_party/libsodium
 git checkout tags/1.0.3
@@ -14,8 +18,9 @@ make
 sudo make install
 cd ../../
 
-
+rm _build -f
 mkdir _build
+cd _build
 cmake \
     -DAUTOTEST=ON \
     -DBOOTSTRAP_DAEMON=OFF \
@@ -36,15 +41,18 @@ sudo make install
 可以直接运行
 ./sh/ubuntu_install.sh  
 
+## 测试
+
+```sh
+
+```
 ## 卸载 
 
 ```sh
 sudo rm -rf /usr/local/lib/libtoxcore* 
 sudo rm -rf /usr/local/lib/libsodium*
 sudo rm -rf /usr/local/include/sodium* 
-sudo rm -rf /usr/local/include/tox 
-sudo rm  /usr/bin/DHT_bootstrap
-sudo rm  /usr/bin/tox-bootstrapd
+sudo rm -rf /usr/local/include/tox*
 ```
 可以直接运行
 ./sh/ubuntu_uninstall.sh
