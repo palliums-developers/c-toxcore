@@ -33,6 +33,8 @@ cmake \
 make 
 sudo make install 
 ```
+可以直接运行
+./sh/ubuntu_install.sh  
 
 ## 卸载 
 
@@ -44,7 +46,8 @@ sudo rm -rf /usr/local/include/tox
 sudo rm  /usr/bin/DHT_bootstrap
 sudo rm  /usr/bin/tox-bootstrapd
 ```
-对应的文件在sh/ubuntu_install.sh  sh/ubuntu_uninstall.sh
+可以直接运行
+./sh/ubuntu_uninstall.sh
 
 ## What is Tox
 
