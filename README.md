@@ -52,8 +52,7 @@ sudo rm -rf /usr/local/lib/libsodium*
 sudo rm -rf /usr/local/include/sodium* 
 sudo rm -rf /usr/local/include/tox*
 ```
-或运行
-./sh/ubuntu_uninstall.sh
+见./sh/ubuntu_uninstall.sh
 
 
 ## window
