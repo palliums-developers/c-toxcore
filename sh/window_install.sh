@@ -1,27 +1,29 @@
 #!/bin/sh
 
-set -x -e
+set -x -e 
 
 WINDOWS_TOOLCHAIN=i686-w64-mingw32
 TOXCORE_PATH=${PWD}
 TOXCORE_BUILD_PATH=${TOXCORE_PATH}/_build
 TOXCORE_PREFIX_PATH=${TOXCORE_BUILD_PATH}/bin
-LIBSODIUM_PATH=${TOXCORE_PATH}/third_party/libsodium
-LIBSODIUM_PREFIX_PATH=${LIBSODIUM_PATH}/bin
+LIBSODIUM_PATH=${TOXCORE_PATH}/third_party/
+LIBSODIUM_BUILD_PATH=${LIBSODIUM_PATH}/libsodium
+LIBSODIUM_PREFIX_PATH=${LIBSODIUM_BUILD_PATH}/bin
 
 cd ${LIBSODIUM_PATH}
+git clone  -b stable https://github.com/jedisct1/libsodium.git
+cd ${LIBSODIUM_BUILD_PATH}
+git checkout tags/1.0.3
 ./autogen.sh
-./configure --host=${WINDOW_TOOL_CHAIN} --prefix=${LIBSODIUM_PREFIX_PATH} --enable-static
+./configure --host=${WINDOWS_TOOLCHAIN} --prefix=${LIBSODIUM_PREFIX_PATH} --enable-static
 make 
 sudo make install
-make distclean
 cd ${TOXCORE_PATH}
 
 export MAKEFLAGS=j$(nproc)
 export CFLAGS=-O3
 export PKG_CONFIG_PATH="${LIBSODIUM_PREFIX_PATH}/lib/pkgconfig"
 
-rm _build -rf
 mkdir _build
 cd _build
 echo "
@@ -65,7 +67,11 @@ cmake -DCMAKE_TOOLCHAIN_FILE=windows_toolchain.cmake \
         -liphlpapi \
         -lws2_32 \
         -static-libgcc
-    mv libtox.dll ${TOXCORE_PREFIX_PATH}/lib
+    mv libtox* ${TOXCORE_PREFIX_PATH}/lib
+    mv ${LIBSODIUM_PREFIX_PATH}/bin/* ${TOXCORE_PREFIX_PATH}/lib/
+    mv ${LIBSODIUM_PREFIX_PATH}/include/* ${TOXCORE_PREFIX_PATH}/include
+    mv ${LIBSODIUM_PREFIX_PATH}/lib/pkgconfig ${TOXCORE_PREFIX_PATH}/lib/pkgconfig
+    mv ${LIBSODIUM_PREFIX_PATH}/lib/* ${TOXCORE_PREFIX_PATH}/lib
     mv ${TOXCORE_PREFIX_PATH} ${TOXCORE_PATH}
     rm ${TOXCORE_BUILD_PATH} -rf
     mkdir ${TOXCORE_BUILD_PATH} -p

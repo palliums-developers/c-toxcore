@@ -1,15 +1,20 @@
 #!/bin/bash
 
 set -x -e 
-cd ./third_party/libsodium
+
+cd ..
+git clone -b stable https://github.com/jedisct1/libsodium.git
+cd ./libsodium
+git checkout tags/1.0.3
 ./autogen.sh
 ./configure
 make 
 sudo make install
-make distclean
-cd ../../
+cd ../
+rm libsodium -rf
+cd c-toxcore
 
-rm _build -f
+rm _build -rf
 mkdir _build
 cd _build
 cmake \

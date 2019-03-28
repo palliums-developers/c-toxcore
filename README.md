@@ -37,8 +37,7 @@ cmake \
 make 
 sudo make install 
 ```
-可以直接运行
-./sh/ubuntu_install.sh  
+见./sh/ubuntu_install.sh  
 
 ## 测试
 
@@ -53,9 +52,103 @@ sudo rm -rf /usr/local/lib/libsodium*
 sudo rm -rf /usr/local/include/sodium* 
 sudo rm -rf /usr/local/include/tox*
 ```
-可以直接运行
+或运行
 ./sh/ubuntu_uninstall.sh
 
+
+## window
+
+## 工具
+```sh
+sudo apt-get install autoconf
+sudo apt-get install cmake 
+sudo apt-get install mingw32
+```
+
+## 编译
+```sh
+WINDOWS_TOOLCHAIN=i686-w64-mingw32
+TOXCORE_PATH=${PWD}
+TOXCORE_BUILD_PATH=${TOXCORE_PATH}/_build
+TOXCORE_PREFIX_PATH=${TOXCORE_BUILD_PATH}/bin
+LIBSODIUM_PATH=${TOXCORE_PATH}/third_party/
+LIBSODIUM_BUILD_PATH=${LIBSODIUM_PATH}/libsodium
+LIBSODIUM_PREFIX_PATH=${LIBSODIUM_BUILD_PATH}/bin
+
+cd ${LIBSODIUM_PATH}
+git clone  -b stable https://github.com/jedisct1/libsodium.git
+cd ${LIBSODIUM_BUILD_PATH}
+git checkout tags/1.0.3
+./autogen.sh
+./configure --host=${WINDOWS_TOOLCHAIN} --prefix=${LIBSODIUM_PREFIX_PATH} --enable-static
+make 
+sudo make install
+cd ${TOXCORE_PATH}
+export MAKEFLAGS=j$(nproc)
+export CFLAGS=-O3
+export PKG_CONFIG_PATH="${LIBSODIUM_PREFIX_PATH}/lib/pkgconfig"
+mkdir _build
+cd _build
+
+echo "
+SET(CMAKE_SYSTEM_NAME  Windows)
+SET(CMAKE_C_COMPILER   ${WINDOWS_TOOLCHAIN}-gcc)
+SET(CMAKE_CXX_COMPILER ${WINDOWS_TOOLCHAIN}-g++)
+SET(CMAKE_FIND_ROOT_PATH /usr/${WINDOWS_TOOLCHAIN} ${LIBSODIUM_PREFIX_PATH})
+" > windows_toolchain.cmake
+
+cmake -DCMAKE_TOOLCHAIN_FILE=windows_toolchain.cmake \
+                             -DAUTOTEST=OFF \
+                             -DCMAKE_INSTALL_PREFIX="${TOXCORE_PREFIX_PATH}" \
+                             -DENABLE_SHARED=OFF \
+                             -DENABLE_STATIC=ON \
+                             -DBOOSTRAP_DAEMON=OFF \
+                             -DBUILD_AV_TEST=OFF \
+                             -DDHT_BOOSTRAP=ON \
+                             -DBUILD_TOXAV=OFF \
+                             -DCMAKE_C_FLAGS="${CMAKE_C_FLAGS}" \
+                             -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS}" \
+                             -DCMAKE_EXE_LINKER_FLAGS="${CMAKE_EXE_LINKER_FLAGS}" \
+                             -DCMAKE_SHARED_LINKER_FLAGS="${CMAKE_SHARED_LINKER_FLAGS}" \
+                             -DCMAKE_GNUtoMS:BOOL=ON \
+                             ${EXTRA_CMAKE_FLAGS} \
+                             ..
+cmake --build . --target install -- -j${nproc}
+for archive in ${RESULT_PREFIX_DIR}/lib/libtox*.a
+do
+${WINDOWS_TOOLCHAIN}-ar xv ${archive}
+echo "archive = ${archive}"
+done
+
+${WINDOWS_TOOLCHAIN}-gcc -Wl,--export-all-symbols \
+        -Wl,--out-implib=libtox.dll.a\
+        -shared \
+        -o libtox.dll \
+        *.obj \
+        ${TOXCORE_PREFIX_PATH}/lib/*.a \
+        ${LIBSODIUM_PREFIX_PATH}/lib/*.a \
+        /usr/${WINDOWS_TOOLCHAIN}/lib/libwinpthread.a \
+        -liphlpapi \
+        -lws2_32 \
+        -static-libgcc
+mv libtox* ${TOXCORE_PREFIX_PATH}/lib
+mv ${LIBSODIUM_PREFIX_PATH}/bin/* ${TOXCORE_PREFIX_PATH}/lib/
+mv ${LIBSODIUM_PREFIX_PATH}/include/* ${TOXCORE_PREFIX_PATH}/include
+mv ${LIBSODIUM_PREFIX_PATH}/lib/pkgconfig ${TOXCORE_PREFIX_PATH}/lib/pkgconfig
+mv ${LIBSODIUM_PREFIX_PATH}/lib/* ${TOXCORE_PREFIX_PATH}/lib
+mv ${TOXCORE_PREFIX_PATH} ${TOXCORE_PATH}
+rm ${TOXCORE_BUILD_PATH} -rf
+mkdir ${TOXCORE_BUILD_PATH} -p
+mv ${TOXCORE_PATH}/bin ${TOXCORE_PREFIX_PATH}
+``` 
+见./sh/window_install.sh
+
+## 清除
+```sh
+rm ./_build -R
+rm ./third_party/libsodium -R
+```
+见./sh/window_uninstall.sh
 ## What is Tox
 
 Tox is a peer to peer (serverless) instant messenger aimed at making security
