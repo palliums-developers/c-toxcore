@@ -141,6 +141,7 @@ mkdir ${TOXCORE_BUILD_PATH} -p
 mv ${TOXCORE_PATH}/bin ${TOXCORE_PREFIX_PATH}
 ``` 
 见./sh/window_install.sh
+生成文件在 _build文件夹
 
 ## 清除
 ```sh
@@ -148,6 +149,55 @@ rm ./_build -R
 rm ./third_party/libsodium -R
 ```
 见./sh/window_uninstall.sh
+
+
+## MAC OS
+
+## 工具
+```sh
+sudo curl -OL http://ftpmirror.gnu.org/autoconf/autoconf-latest.tar.gz
+tar xzf autoconf-latest.tar.gz
+cd autoconf-latest
+sudo ./configure --prefix=/usr/local/autotools-bin
+sudo make
+sudo make install
+export PATH=$PATH:/usr/local/autotools-bin/bin
+
+
+sudo curl -OL http://ftpmirror.gnu.org/automake/automake-1.15.tar.gz
+sudo tar xzf automake-1.15.tar.gz
+cd automake-1.15
+sudo ./configure --prefix=/usr/local/autotools-bin
+sudo sudo make
+sudo make install
+
+sudo curl -OL http://ftpmirror.gnu.org/libtool/libtool-2.4.6.tar.gz
+sudo tar xzf libtool-2.4.6.tar.gz
+cd libtool-2.4.6
+sudo ./configure --prefix=/usr/local/autotools-bin
+sudo make
+sudo make install
+```
+
+## 安装
+```sh
+git clone -b stable git://github.com/jedisct1/libsodium.git
+cd libsodium
+git chekcout tags/1.0.3
+./autogen.sh
+./configure
+make 
+sudo make install
+cd ..
+
+./autogen.sh
+./configure
+make  
+sudo make install
+```
+
+
+
 ## What is Tox
 
 Tox is a peer to peer (serverless) instant messenger aimed at making security
