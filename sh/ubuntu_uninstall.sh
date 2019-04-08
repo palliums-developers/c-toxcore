@@ -1,6 +1,7 @@
-#!/bin/sh
-
-sudo rm -rf /usr/local/lib/libtoxcore* 
-sudo rm -rf /usr/local/lib/libsodium*
-sudo rm -rf /usr/local/include/sodium* 
-sudo rm -rf /usr/local/include/tox*
+#!/bin/bash
+set -e -u -x
+ldconfig
+ldconfig -p | grep libtoxcore > /dev/null ||(echo >&2 "libtoxcore is uninstalled" ; exit 1)
+INSTALL_DIR=/usr/local
+rm ${INSTALL_DIR}/lib/libtox* -rf
+rm ${INSTALL_DIR}/include/tox* -rf
